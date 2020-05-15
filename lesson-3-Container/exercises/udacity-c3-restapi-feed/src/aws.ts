@@ -4,12 +4,13 @@ import { config } from './config/config';
 const c = config.dev;
 
 //Configure AWS
-var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
+var credentials = new AWS.SharedIniFileCredentials({profile: c.aws_profile});
 AWS.config.credentials = credentials;
+
 
 export const s3 = new AWS.S3({
   signatureVersion: 'v4',
-  region: c.aws_reigion,
+  region: c.aws_region,
   params: {Bucket: c.aws_media_bucket}
 });
 
@@ -21,15 +22,27 @@ export const s3 = new AWS.S3({
  *    a url as a string
  */
 export function getGetSignedUrl( key: string ): string{
+  var params={
+    Bucket : c.aws_media_bucket
+  }
+  s3.getBucketLocation(params, function(err, data){
+    if (err){console.log(err, err.stack);}
+    else{
+      console.log("location is" +data);
+    }
+  });
 
   const signedUrlExpireSeconds = 60 * 5
+  console.log("key is  " + key);
+  console.log("aws_media_bucket is  " + c.aws_media_bucket);
+  console.log("aws_region is   " + c.aws_region);
 
     const url = s3.getSignedUrl('getObject', {
         Bucket: c.aws_media_bucket,
         Key: key,
         Expires: signedUrlExpireSeconds
       });
-
+console.log("url is" + url);
     return url;
 }
 

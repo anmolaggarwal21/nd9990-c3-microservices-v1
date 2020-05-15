@@ -1,0 +1,18 @@
+version: "3"
+services:
+  reverseproxy:
+    build:
+      context: .
+    image: anmolaggarwal21/reverseproxy 
+  backend_user:
+    build:
+      context: ../../udacity-c3-restapi-user
+    image: anmolaggarwal21/udacity-restapi-user2
+  backend_feed:
+    build:
+      context: ../../udacity-c3-restapi-feed  
+    image: anmolaggarwal21/udacity-restapi-feed2
+  frontend:
+    build:
+      context: ../../udacity-c3-frontend  
+    image: anmolaggarwal21/udacity-frontend2
